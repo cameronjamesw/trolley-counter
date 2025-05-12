@@ -1,10 +1,18 @@
 from django.http import HttpResponse
+from django.shortcuts import render
+from .models import Trolley
 
 # Create your views here.
 
 
 def homePage(request):
-    return HttpResponse("Hello world, this is the home page!")
+    trollies = Trolley.objects.all()
+
+    return render(
+        request,
+        "counter/index.html",
+        {"trollies": trollies}
+    )
 
 def addTrolley(request):
     return HttpResponse("Hello World, this is the addTrolley page")
