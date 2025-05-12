@@ -108,6 +108,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 CSRF_TRUSTED_ORIGINS = [
     'https://trolley-counter-91842d1b0f5e.herokuapp.com',
+    'https://*.herokuapp.com',
 ]
 
 
