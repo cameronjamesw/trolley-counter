@@ -12,6 +12,10 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 import dj_database_url
 from pathlib import Path
+import os
+
+if os.path.exists('env.py'):
+    import env
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,10 +25,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-+5-!k9l*a&h^n=&eo1_2ygh)zd14(%=syi)2gh*n+p=a%f2efc'
+SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -77,7 +81,7 @@ WSGI_APPLICATION = 'counter_app.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.parse(
-        'postgresql://hstrolleycounter_owner:npg_aNO5gmLklD3x@ep-weathered-darkness-abdx37ax-pooler.eu-west-2.aws.neon.tech/hstrolleycounter?sslmode=require',
+        os.environ.get("DATABASE_URL"),
         conn_max_age=600,
         ssl_require=True
     )
