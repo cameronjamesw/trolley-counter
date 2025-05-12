@@ -1,32 +1,8 @@
-# Python
+core.Microsoft*
+core.mongo*
+core.python*
+env.py
 __pycache__/
 *.py[cod]
-*.pyo
-*.pyd
-*.so
-
-# Virtual environment
-venv/
-env/
-
-# Django stuff
-*.log
-*.pot
-*.pyc
-db.sqlite3
-media/
-staticfiles/
-
-# Local environment settings
-.env
-env.py
-
-# IDEs
-.vscode/
-.idea/
-
-# macOS
-.DS_Store
-
-# Heroku
-*.sqlite3
+node_modules/
+.github/
