@@ -34,12 +34,12 @@ class Shape(models.Model):
     checked = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"A {self.shape} tote, linked to trolley number: {self.trolley.id}"
+        return f"A {self.get_shape_display()} tote, linked to trolley number: {self.trolley.id}"
 
     def save(self, *args, **kwargs):
         if self.trolley and not self.pk:  # Only enforce on create
-            if self.trolley.totes_count == 1 & Shape.objects.filter(trolley=self.trolley).count() >= 8:
+            if self.trolley.totes_count == 1 and Shape.objects.filter(trolley=self.trolley).count() >= 8:
                 raise ValidationError("Small trolley's cannot have more than 8 totes!.")
-            elif self.trolley.totes_count == 1 & Shape.objects.filter(trolley=self.trolley).count() >= 10:
+            elif self.trolley.totes_count == 1 and Shape.objects.filter(trolley=self.trolley).count() >= 10:
                 raise ValidationError("Big trolley's cannot have more than 10 totes!.")
         super().save(*args, **kwargs)
