@@ -14,3 +14,9 @@ body {
 main {
     flex: 1 0 auto;
 }
+
+#plus-icon {
+    font-size: 2rem;
+    padding-left: 20px;
+    padding-right: 20px;
+}
