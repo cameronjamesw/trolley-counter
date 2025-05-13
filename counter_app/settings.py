@@ -31,7 +31,9 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 DEBUG = False
 
 ALLOWED_HOSTS = ['https://trolley-counter-91842d1b0f5e.herokuapp.com',
-                 '.herokuapp.com']
+                '.herokuapp.com',
+                'localhost',
+                '127.0.0.1',]
 
 
 # Application definition
@@ -114,6 +116,7 @@ AUTH_PASSWORD_VALIDATORS = [
 CSRF_TRUSTED_ORIGINS = [
     'https://trolley-counter-91842d1b0f5e.herokuapp.com',
     'https://*.herokuapp.com',
+    'http://127.0.0.1:8000',
 ]
 
 
