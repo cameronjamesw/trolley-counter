@@ -18,9 +18,12 @@
     <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
   </head>
   <body>
-    <header>
+    <!-- This is the header -->
+    <header class="bg-success">
       <h1 class="text-center">Cam's Trolley Counter</h1>
-      <nav class="navbar navbar-expand-lg bg-body-tertiary">
+
+      <!-- This is the nav element -->
+      <nav class="navbar navbar-expand-lg bg-success">
         <div class="container-fluid">
           <a class="navbar-brand" href="#">Navbar</a>
           <button
@@ -69,11 +72,14 @@
       </nav>
     </header>
 
-    {% block content %}
-    <!-- Child content goes here -->
-    {% endblock %}
+    <main>
+      {% block content %}
+      <!-- Child content goes here -->
+      {% endblock %}
+    </main>
 
-    <footer>
+    <!-- This is the footer -->
+    <footer class="bg-success">
       <p>Created by Cam Wheatley</p>
     </footer>
   </body>
