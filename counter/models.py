@@ -45,6 +45,12 @@ class FrontLabel(models.Model):
                 raise ValidationError(("Small trolleys cannot have more than 8 totes."))
             elif self.trolley.totes_count != 1 and count >= 10:
                 raise ValidationError(("Big trolleys cannot have more than 10 totes."))
+            
+        
+        # Check if this shape is already used for the same trolley
+        if FrontLabel.objects.filter(trolley=self.trolley, shape=self.shape).exists():
+            shape_name = Shapes(self.shape).label  # Get display name like "Square"
+            raise ValidationError((f"The shape '{shape_name}' is already assigned to this trolley."))
 
     def save(self, *args, **kwargs):
         self.full_clean()  # Ensure clean() is called before saving
@@ -67,6 +73,12 @@ class BackLabel(models.Model):
                 raise ValidationError(("Small trolleys cannot have more than 8 totes."))
             elif self.trolley.totes_count != 1 and count >= 10:
                 raise ValidationError(("Big trolleys cannot have more than 10 totes."))
+            
+        
+        # Check if this shape is already used for the same trolley
+        if BackLabel.objects.filter(trolley=self.trolley, shape=self.shape).exists():
+            shape_name = Shapes(self.shape).label  # Get display name like "Square"
+            raise ValidationError((f"The shape '{shape_name}' is already assigned to this trolley."))
 
     def save(self, *args, **kwargs):
         self.full_clean()  # Ensure clean() is called before saving
