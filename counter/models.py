@@ -22,24 +22,44 @@ class Shapes(models.IntegerChoices):
 class Trolley(models.Model):
     id = models.AutoField(primary_key=True)
     totes_count = models.IntegerField(choices=Status.choices, default=Status.EIGHT)
-    date_added = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     notes = models.TextField(max_length=200)
 
     def __str__(self):
         return f"Trolley number {self.id}"
 
-class Shape(models.Model):
+class FrontLabel(models.Model):
     trolley = models.ForeignKey(Trolley, on_delete=models.CASCADE)
     shape = models.IntegerField(choices=Shapes.choices, default=Shapes.SQUARE)
     checked = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"A {self.get_shape_display()} tote, linked to trolley number: {self.trolley.id}"
+        return f"A front, {self.get_shape_display()} label, linked to trolley number: {self.trolley.id} | Created at {self.created_at}"
 
     def save(self, *args, **kwargs):
         if self.trolley and not self.pk:  # Only enforce on create
-            if self.trolley.totes_count == 1 and Shape.objects.filter(trolley=self.trolley).count() >= 8:
+            if self.trolley.totes_count == 1 and FrontLabel.objects.filter(trolley=self.trolley).count() >= 8:
                 raise ValidationError("Small trolley's cannot have more than 8 totes!.")
-            elif self.trolley.totes_count == 1 and Shape.objects.filter(trolley=self.trolley).count() >= 10:
+            elif self.trolley.totes_count == 1 and FrontLabel.objects.filter(trolley=self.trolley).count() >= 10:
+                raise ValidationError("Big trolley's cannot have more than 10 totes!.")
+        super().save(*args, **kwargs)
+
+
+class BackLabel(models.Model):
+    trolley = models.ForeignKey(Trolley, on_delete=models.CASCADE)
+    shape = models.IntegerField(choices=Shapes.choices, default=Shapes.SQUARE)
+    checked = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"A back, {self.get_shape_display()} label, linked to trolley number: {self.trolley.id} | Created at {self.created_at}"
+
+    def save(self, *args, **kwargs):
+        if self.trolley and not self.pk:  # Only enforce on create
+            if self.trolley.totes_count == 1 and BackLabel.objects.filter(trolley=self.trolley).count() >= 8:
+                raise ValidationError("Small trolley's cannot have more than 8 totes!.")
+            elif self.trolley.totes_count == 1 and BackLabel.objects.filter(trolley=self.trolley).count() >= 10:
                 raise ValidationError("Big trolley's cannot have more than 10 totes!.")
         super().save(*args, **kwargs)
