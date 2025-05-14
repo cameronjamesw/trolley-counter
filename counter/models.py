@@ -36,14 +36,18 @@ class FrontLabel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"A front, {self.get_shape_display()} label, linked to trolley number: {self.trolley.id} | Created at {self.created_at}"
+        return f"A back, {self.get_shape_display()} label, linked to trolley number: {self.trolley.id} | Created at {self.created_at}"
+
+    def clean(self):
+        if self.trolley and not self.pk:  # Only validate on creation
+            count = FrontLabel.objects.filter(trolley=self.trolley).count()
+            if self.trolley.totes_count == 1 and count >= 8:
+                raise ValidationError(("Small trolleys cannot have more than 8 totes."))
+            elif self.trolley.totes_count != 1 and count >= 10:
+                raise ValidationError(("Big trolleys cannot have more than 10 totes."))
 
     def save(self, *args, **kwargs):
-        if self.trolley and not self.pk:  # Only enforce on create
-            if self.trolley.totes_count == 1 and FrontLabel.objects.filter(trolley=self.trolley).count() >= 8:
-                raise ValidationError("Small trolley's cannot have more than 8 totes!.")
-            elif self.trolley.totes_count == 1 and FrontLabel.objects.filter(trolley=self.trolley).count() >= 10:
-                raise ValidationError("Big trolley's cannot have more than 10 totes!.")
+        self.full_clean()  # Ensure clean() is called before saving
         super().save(*args, **kwargs)
 
 
@@ -56,10 +60,14 @@ class BackLabel(models.Model):
     def __str__(self):
         return f"A back, {self.get_shape_display()} label, linked to trolley number: {self.trolley.id} | Created at {self.created_at}"
 
+    def clean(self):
+        if self.trolley and not self.pk:  # Only validate on creation
+            count = BackLabel.objects.filter(trolley=self.trolley).count()
+            if self.trolley.totes_count == 1 and count >= 8:
+                raise ValidationError(("Small trolleys cannot have more than 8 totes."))
+            elif self.trolley.totes_count != 1 and count >= 10:
+                raise ValidationError(("Big trolleys cannot have more than 10 totes."))
+
     def save(self, *args, **kwargs):
-        if self.trolley and not self.pk:  # Only enforce on create
-            if self.trolley.totes_count == 1 and BackLabel.objects.filter(trolley=self.trolley).count() >= 8:
-                raise ValidationError("Small trolley's cannot have more than 8 totes!.")
-            elif self.trolley.totes_count == 1 and BackLabel.objects.filter(trolley=self.trolley).count() >= 10:
-                raise ValidationError("Big trolley's cannot have more than 10 totes!.")
+        self.full_clean()  # Ensure clean() is called before saving
         super().save(*args, **kwargs)
